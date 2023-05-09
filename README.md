@@ -15,11 +15,37 @@ update `database_connection` variable for your database.
 
 ## Usage
 
-To syncrionise billing CSV to PostGIS, execute the following command. Make sure specifing CSV file path as well.
+To sync billing CSV to PostGIS, execute the following command. Make sure specifing CSV file path as well.
 
 ```shell
 pipenv run sync data/CUSTOMER\ ACCOUNTS\ CSV_16_18_14.csv
 ```
+
+## Download uncaptured customer data
+
+You can download the customer data which the coordinates are not captured yet by using the following SQL.
+
+```sql
+SELECT
+    a.zonecd, 
+    a.connno, 
+    a.name, 
+    a.villageid, 
+    a.insertdate, 
+    a.updatedate, 
+    a.status, 
+    a.serialno, 
+    a.category, 
+    a.service_type, 
+    a.disconnection_type
+FROM public.customer a
+where not exists (select * from meter where zonecd = a.zonecd and connno = a.connno)
+and zonecd in ('A', 'B', 'C', 'D')
+```
+
+If you only want to download cusotmers in Narok town, change `and zonecd in ('A', 'B', 'C', 'D')` to `and zonecd in ('A', 'B')`.
+
+If you only want to download them in Ololulunga, change it to `and zonecd in ('C')`
 
 ## update customer table
 
