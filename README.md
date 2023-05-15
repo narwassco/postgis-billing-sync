@@ -4,6 +4,7 @@ This repository is to manage the script which synchronies GIS database and new b
 ## Install
 
 ```shell
+git clone git@github.com:narwassco/postgis-billing-sync.git
 pipenv install
 ```
 
